@@ -1,5 +1,5 @@
-bin/Debug
-obj/Debug
+algonquinCollegeDiscordBotbin/Debug
+algonquinCollegeDiscordBot/obj/Debug
 *.resx
 algonquinCollegeDiscordBot/creds.Designer.cs
 .vs/
