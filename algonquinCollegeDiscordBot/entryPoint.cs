@@ -18,9 +18,16 @@ namespace algonquinCollegeDiscordBot
             _client = new DiscordSocketClient();
             _handler = new CommandHandler(_client);
             await _client.LoginAsync(TokenType.Bot, creds.token);
+            _client.Log += _client_Log;
             await _client.StartAsync();
             await Task.Delay(-1);
             
         }
-     }
+
+        private async Task _client_Log(LogMessage log)
+        {
+            Console.WriteLine(log.Message);
+            await Task.Yield();
+        }
+    }
 }

@@ -7,7 +7,7 @@ namespace algonquinCollegeDiscordBot.Modules
 {
     public class Commands : ModuleBase<SocketCommandContext>
     {
-        
+        //pastebin of commands https://pastebin.com/rNVFPfw2
         [Command("rules"), Summary("Displays the rules of the server")]
         public async Task Rules()
         {
@@ -30,12 +30,13 @@ namespace algonquinCollegeDiscordBot.Modules
         {
             await Context.Channel.SendMessageAsync(
                 "Current Supported Commands: \n" +
+                "https://pastebin.com/w7x8Zq7v \n" +
                 "\n" +
                 "!commands\n" +
                 "!invite\n" +
                 "!rules\n" +
                 "!sourcecode\n" +
-                "!about");
+                "!today");
 
         }
         [Command("invite"), Summary("Displays the permanent invite link for the Algonquin College discord.")]
@@ -47,7 +48,7 @@ namespace algonquinCollegeDiscordBot.Modules
         [Command("sourcecode"), Summary("Displays the github repo for this discord bot.")]
         public async Task Sourcecode()
         {
-            await Context.Channel.SendMessageAsync("https://github.com/kieran-github/Algonquin-College-Discord-Bot using discord.net api");
+            await Context.Channel.SendMessageAsync("https://github.com/kieran-github/Algonquin-College-Discord-Bot using discord.net api: https://discord.foxbot.me/docs/");
         }
 
         [Command("today"), Summary("Gets current date in form MMMM dd and then parses the academic calendar to see if there is a event.")]
