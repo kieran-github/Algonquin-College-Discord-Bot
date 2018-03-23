@@ -1,7 +1,8 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using System.Threading.Tasks;
-
+using System.IO;
+using System;
 
 namespace algonquinCollegeDiscordBot
 {
@@ -16,10 +17,10 @@ namespace algonquinCollegeDiscordBot
         {
             _client = new DiscordSocketClient();
             _handler = new CommandHandler(_client);
-
             await _client.LoginAsync(TokenType.Bot, creds.token);
             await _client.StartAsync();
             await Task.Delay(-1);
+            
         }
-    }
+     }
 }

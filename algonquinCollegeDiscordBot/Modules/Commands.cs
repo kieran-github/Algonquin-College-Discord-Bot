@@ -1,11 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Discord.Commands;
 using System.IO;
-
+using System;
+using System.Collections.Generic;
 namespace algonquinCollegeDiscordBot.Modules
 {
     public class Commands : ModuleBase<SocketCommandContext>
     {
+        
         [Command("rules"), Summary("Displays the rules of the server")]
         public async Task Rules()
         {
@@ -32,7 +34,8 @@ namespace algonquinCollegeDiscordBot.Modules
                 "!commands\n" +
                 "!invite\n" +
                 "!rules\n" +
-                "!sourcecode");
+                "!sourcecode\n" +
+                "!about");
 
         }
         [Command("invite"), Summary("Displays the permanent invite link for the Algonquin College discord.")]
@@ -44,7 +47,33 @@ namespace algonquinCollegeDiscordBot.Modules
         [Command("sourcecode"), Summary("Displays the github repo for this discord bot.")]
         public async Task Sourcecode()
         {
-            await Context.Channel.SendMessageAsync("github.com/kieran-github");
+            await Context.Channel.SendMessageAsync("https://github.com/kieran-github/Algonquin-College-Discord-Bot using discord.net api");
+        }
+
+        [Command("today"), Summary("Gets current date in form MMMM dd and then parses the academic calendar to see if there is a event.")]
+        public async Task Today()
+        {
+            String[] lines = File.ReadAllLines(@"D:\Computer Science - Programming libary\C# .NET\algonquinCollegeDiscordBot\algonquinCollegeDiscordBot\AcademicCalendarMar2018.txt");
+            List<String> result = new List<String>();     
+            DateTime dateTime = DateTime.UtcNow.Date;
+            foreach (string line in lines)
+            {
+                if (line.StartsWith(dateTime.ToString("MMMM dd")))
+                {
+                    result.Add(line);
+                }
+            }
+            if (result.Count != 0)
+            {
+                foreach (String cDate in result)
+                {
+                    await Context.Channel.SendMessageAsync(cDate);
+                }
+            }
+            else
+            {
+                await Context.Channel.SendMessageAsync("Nothing special today.");
+            }
         }
     }
 }
