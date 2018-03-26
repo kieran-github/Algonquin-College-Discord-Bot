@@ -11,7 +11,7 @@ namespace algonquinCollegeDiscordBot.Modules
 {
     public class Commands : ModuleBase<SocketCommandContext>
     {
-        //pastebin of commands https://pastebin.com/rNVFPfw2
+        //pastebin of commands https://pastebin.com/w7x8Zq7v
         [Command("rules"), Summary("Displays the rules of the server")]
         public async Task Rules()
         {
