@@ -3,6 +3,10 @@ using Discord.Commands;
 using System.IO;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using Newtonsoft.Json.Linq;
+using Discord;
+
 namespace algonquinCollegeDiscordBot.Modules
 {
     public class Commands : ModuleBase<SocketCommandContext>
@@ -36,7 +40,10 @@ namespace algonquinCollegeDiscordBot.Modules
                 "!invite\n" +
                 "!rules\n" +
                 "!sourcecode\n" +
-                "!today");
+                "!today" +
+                "!map" +
+                "!crypto" +
+                "!crypto + currency name");
 
         }
         [Command("invite"), Summary("Displays the permanent invite link for the Algonquin College discord.")]
@@ -55,7 +62,7 @@ namespace algonquinCollegeDiscordBot.Modules
         public async Task Today()
         {
             String[] lines = File.ReadAllLines(@"D:\Computer Science - Programming libary\C# .NET\algonquinCollegeDiscordBot\algonquinCollegeDiscordBot\AcademicCalendarMar2018.txt");
-            List<String> result = new List<String>();     
+            List<String> result = new List<String>();
             DateTime dateTime = DateTime.UtcNow.Date;
             foreach (string line in lines)
             {
@@ -74,6 +81,145 @@ namespace algonquinCollegeDiscordBot.Modules
             else
             {
                 await Context.Channel.SendMessageAsync("Nothing special today.");
+            }
+        }
+        [Command("map"), Summary("Pulls the Algonquin college map as pdf and displays it aswell as download link.")]
+        public async Task Map()
+        {
+            await Context.Channel.SendMessageAsync("http://www.algonquincollege.com/parking/files/2017/05/Parking-Map_w-legend_8.5x11_May2017.pdf");
+            await Context.Channel.SendFileAsync("D:\\Computer Science - Programming libary\\C# .NET\\algonquinCollegeDiscordBot\\algonquinCollegeDiscordBot\\Parking-Map_w-legend_8.5x11_May2017.pdf");
+        }
+    }
+
+
+    [Group("crypto"), Summary("A class that will handle the multiple commands for crypto pricing.")]
+    public partial class Crytpo : ModuleBase<SocketCommandContext>
+    {
+        [Command, Summary("Using the coinbase API, makes a REST API request for current price of bitcoin.")]
+        public async Task Bitcoin()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+
+                var responseBTC = httpClient.GetStringAsync(new Uri("https://api.coinbase.com/v2/prices/btc-usd/spot")).Result;
+                var responseETH = httpClient.GetStringAsync(new Uri("https://api.coinbase.com/v2/prices/eth-usd/spot")).Result;
+                var responseLTC = httpClient.GetStringAsync(new Uri("https://api.coinbase.com/v2/prices/ltc-usd/spot")).Result;
+                dynamic dataBTC = JObject.Parse(responseBTC);
+                dynamic dataETH = JObject.Parse(responseETH);
+                dynamic dataLTC = JObject.Parse(responseLTC);
+                builder.WithTitle("Current Crypto prices: ")
+                    .AddField("BTC:", $"{dataBTC.data.amount}")
+                    .AddField("ETH:", $"{dataETH.data.amount}")
+                    .AddField("LTC:", $"{dataLTC.data.amount}")
+
+                    .WithColor(Color.Blue);
+
+                await ReplyAsync("", false, builder.Build());
+            }
+        }
+        [Command("bitcoin")]
+        public async Task BitcoinOnly()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+
+                var responseBTC = httpClient.GetStringAsync(new Uri("https://api.coinbase.com/v2/prices/btc-usd/spot")).Result;
+                dynamic dataBTC = JObject.Parse(responseBTC);
+                builder.WithTitle("Current Crypto prices: ")
+                    .AddField("BTC:", $"{dataBTC.data.amount}")
+                    .WithColor(Color.Blue);
+
+                await ReplyAsync("", false, builder.Build());
+            }
+        }
+        [Command("btc")]
+        public async Task BitcoinShort()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+
+                var responseBTC = httpClient.GetStringAsync(new Uri("https://api.coinbase.com/v2/prices/btc-usd/spot")).Result;
+                dynamic dataBTC = JObject.Parse(responseBTC);
+                builder.WithTitle("Current Crypto prices: ")
+                    .AddField("BTC:", $"{dataBTC.data.amount}")
+                    .WithColor(Color.Blue);
+
+                await ReplyAsync("", false, builder.Build());
+            }
+        }
+        [Command("ethereum")]
+        public async Task EthereumOnly()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+
+                var responseBTC = httpClient.GetStringAsync(new Uri("https://api.coinbase.com/v2/prices/eth-usd/spot")).Result;
+                dynamic dataETH = JObject.Parse(responseBTC);
+                builder.WithTitle("Current Crypto prices: ")
+                    .AddField("ETH:", $"{dataETH.data.amount}")
+                    .WithColor(Color.Blue);
+
+                await ReplyAsync("", false, builder.Build());
+            }
+        }
+        [Command("eth")]
+        public async Task EthereumShort()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+
+                var responseBTC = httpClient.GetStringAsync(new Uri("https://api.coinbase.com/v2/prices/eth-usd/spot")).Result;
+                dynamic dataETH = JObject.Parse(responseBTC);
+                builder.WithTitle("Current Crypto prices: ")
+                    .AddField("ETH:", $"{dataETH.data.amount}")
+                    .WithColor(Color.Blue);
+
+                await ReplyAsync("", false, builder.Build());
+            }
+        }
+        [Command("litecoin")]
+        public async Task LitecoinOnly()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+
+                var responseLTC = httpClient.GetStringAsync(new Uri("https://api.coinbase.com/v2/prices/ltc-usd/spot")).Result;
+                dynamic dataLTC = JObject.Parse(responseLTC);
+                builder.WithTitle("Current Crypto prices: ")
+                    .AddField("LTC:", $"{dataLTC.data.amount}")
+                    .WithColor(Color.Blue);
+
+                await ReplyAsync("", false, builder.Build());
+            }
+        }
+        [Command("ltc")]
+        public async Task LitecoinShort()
+        {
+            using (var httpClient = new HttpClient())
+            {
+                EmbedBuilder builder = new EmbedBuilder();
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
+
+                var responseLTC = httpClient.GetStringAsync(new Uri("https://api.coinbase.com/v2/prices/ltc-usd/spot")).Result;
+                dynamic dataLTC = JObject.Parse(responseLTC);
+                builder.WithTitle("Current Crypto prices: ")
+                    .AddField("LTC:", $"{dataLTC.data.amount}")
+                    .WithColor(Color.Blue);
+
+                await ReplyAsync("", false, builder.Build());
+
             }
         }
     }
