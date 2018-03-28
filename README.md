@@ -5,6 +5,7 @@ Discord bot for Algonquin college server. Invite: https://discord.gg/VwukBWK
 # Commands
 
 https://pastebin.com/w7x8Zq7v
+
 !rules - Displays rules of the Algonquin College Discord.
 
 !commands - Displays a list of currently supported commands.
