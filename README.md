@@ -15,8 +15,6 @@ https://pastebin.com/w7x8Zq7v
 
 !today - Parses the academic calendar 2018 and checks the date to see if there's an event for the current month and day.
 
-!week -  Parses the academic calendar 2018 and checks the date to see if there's an event for today and the next seven days.
-
 !month- Parses the academic calendar 2018 and checks the date to see if there's an event for the current month.
 
 !map - links algonquin college map PDF download and link.
