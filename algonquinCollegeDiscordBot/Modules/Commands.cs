@@ -11,6 +11,8 @@ namespace algonquinCollegeDiscordBot.Modules
 {
     public class Commands : ModuleBase<SocketCommandContext>
     {
+        public String[] lines = File.ReadAllLines(@"D:\Computer Science - Programming libary\C# .NET\algonquinCollegeDiscordBot\algonquinCollegeDiscordBot\AcademicCalendarMar2018.txt");
+
         //pastebin of commands https://pastebin.com/w7x8Zq7v
         [Command("rules"), Summary("Displays the rules of the server")]
         public async Task Rules()
@@ -40,9 +42,11 @@ namespace algonquinCollegeDiscordBot.Modules
                 "!invite\n" +
                 "!rules\n" +
                 "!sourcecode\n" +
-                "!today" +
-                "!map" +
-                "!crypto" +
+                "!today\n" +
+                "!week\n" +
+                "!month\n" +
+                "!map\n" +
+                "!crypto\n" +
                 "!crypto + currency name");
 
         }
@@ -61,7 +65,6 @@ namespace algonquinCollegeDiscordBot.Modules
         [Command("today"), Summary("Gets current date in form MMMM dd and then parses the academic calendar to see if there is a event.")]
         public async Task Today()
         {
-            String[] lines = File.ReadAllLines(@"D:\Computer Science - Programming libary\C# .NET\algonquinCollegeDiscordBot\algonquinCollegeDiscordBot\AcademicCalendarMar2018.txt");
             List<String> result = new List<String>();
             DateTime dateTime = DateTime.UtcNow.Date;
             foreach (string line in lines)
@@ -73,16 +76,91 @@ namespace algonquinCollegeDiscordBot.Modules
             }
             if (result.Count != 0)
             {
+                String buffer = "";
                 foreach (String cDate in result)
                 {
-                    await Context.Channel.SendMessageAsync(cDate);
+                    buffer += cDate + "\n";
                 }
+                await Context.Channel.SendMessageAsync(buffer);
             }
             else
             {
                 await Context.Channel.SendMessageAsync("Nothing special today.");
             }
         }
+        [Command("week"), Summary("Gets current date in form MMMM dd and then parses the academic calendar for the week and sends it to the discords channel.")]
+        public async Task Week()
+        {
+            int count = 0;
+            DateTime dateTime = DateTime.UtcNow.Date;
+            List<String> result = new List<String>();
+            foreach (string line in lines)
+            {
+                if (line.StartsWith(dateTime.ToString("MMMM dd")))
+                {
+                    try
+                    {
+                        result.Add(lines[count]);
+                        result.Add(lines[count + 1]);
+                        result.Add(lines[count + 2]);
+                        result.Add(lines[count + 3]);
+                        result.Add(lines[count + 4]);
+                        result.Add(lines[count + 5]);
+                        result.Add(lines[count + 6]);
+                    }
+                    catch (EndOfStreamException)
+                    { 
+                        throw;
+                    }
+                }
+                count++;
+            }
+            if (result.Count != 0)
+            {
+                String buffer = "";
+                foreach (String cDate in result)
+                {
+                    buffer += cDate + "\n";
+                }
+                await Context.Channel.SendMessageAsync(buffer);
+            }
+            else
+            {
+                await Context.Channel.SendMessageAsync("Nothing special for the next seven days.");
+            }
+        }
+
+
+        [Command("month"), Summary("Gets current date in form MMMM and then parses the academic calendar for the month and sends it to the discords channel.")]
+        public async Task Month()
+        {
+            DateTime dateTime = DateTime.UtcNow.Date;
+            List<String> result = new List<String>();
+            foreach (string line in lines)
+            {
+                if (line.StartsWith(dateTime.ToString("MMMM")))
+                {
+                    result.Add(line);
+                }
+            }
+            if (result.Count != 0)
+            {
+                String buffer = "";
+                foreach (String cDate in result)
+                {
+                    buffer += cDate + "\n";
+                }
+                await Context.Channel.SendMessageAsync(buffer);
+            }
+            else
+            {
+                await Context.Channel.SendMessageAsync("Nothing special for this month.");
+            }
+        }
+        
+
+
+
         [Command("map"), Summary("Pulls the Algonquin college map as pdf and displays it aswell as download link.")]
         public async Task Map()
         {
@@ -90,7 +168,6 @@ namespace algonquinCollegeDiscordBot.Modules
             await Context.Channel.SendFileAsync("D:\\Computer Science - Programming libary\\C# .NET\\algonquinCollegeDiscordBot\\algonquinCollegeDiscordBot\\Parking-Map_w-legend_8.5x11_May2017.pdf");
         }
     }
-
 
     [Group("crypto"), Summary("A class that will handle the multiple commands for crypto pricing.")]
     public partial class Crytpo : ModuleBase<SocketCommandContext>
