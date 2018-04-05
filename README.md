@@ -12,7 +12,7 @@ https://pastebin.com/w7x8Zq7v
 
 !invite - Links a permanent discord server invite.
 
-!sourcecode - Link to github where Discord bot source code resides.
+!sourcecode - Links to this github repository where the Discord bot source code resides.
 
 !today - Parses the academic calendar 2018 and checks the date to see if there's an event for the current month and day.
 
